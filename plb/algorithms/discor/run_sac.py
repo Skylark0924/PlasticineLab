@@ -21,7 +21,9 @@ def train(env, path, logger, args):
         target_update_coef=0.005,
         log_interval=10,
         GaussianPolicy=GaussianPolicy,
-        TwinnedStateActionFunction=TwinnedStateActionFunction)
+        TwinnedStateActionFunction=TwinnedStateActionFunction,
+        # load_model_path='log/Writer-v3_sac/model/best'
+        )
 
     agent = Agent(
         env=env, test_env=test_env, algo=algo, log_dir=path,
@@ -29,7 +31,7 @@ def train(env, path, logger, args):
         num_steps=args.num_steps,
         batch_size=256,
         memory_size=1000000,
-        update_interval=1,
+        update_interval=5,
         start_steps=2500,
         log_interval=10,
         eval_interval=200,

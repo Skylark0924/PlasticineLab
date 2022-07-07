@@ -95,7 +95,13 @@ class DiagGaussian(nn.Module):
 
         action_logstd = torch.clamp(
             action_logstd, min=-20, max=2) #TODO: avoid nan ...
-        return FixedNormal(action_mean, action_logstd.exp())
+
+        try:
+            distibute = FixedNormal(action_mean, action_logstd.exp())
+        except:
+            pass
+
+        return distibute
 
 
 class Bernoulli(nn.Module):

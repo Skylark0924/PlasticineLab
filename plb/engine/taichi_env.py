@@ -3,6 +3,7 @@ import cv2
 import taichi as ti
 
 # TODO: run on GPU, fast_math will cause error on float64's sqrt; removing it cuases compile error..
+# ti.init(arch=ti.gpu, debug=False, fast_math=True, default_fp=ti.f64)
 ti.init(arch=ti.gpu, debug=False, fast_math=True)
 
 @ti.data_oriented

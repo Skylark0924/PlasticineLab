@@ -118,7 +118,9 @@ def get_args():
         default=5e5,
         help='number of environment steps to train (default: 10e6)')
     parser.add_argument(
-        'env_name',
+        '--env-name',
+        type=str,
+        default="Doughstretch-v1",
         help='environment to train on (default: PongNoFrameskip-v4)')
     parser.add_argument(
         '--log-dir',

@@ -15,16 +15,18 @@ from plb.optimizer.solver_nn import solve_nn
 RL_ALGOS = ['sac', 'td3', 'ppo']
 DIFF_ALGOS = ['action', 'nn']
 
+
 def set_random_seed(seed):
     random.seed(seed)
     np.random.seed(seed)
     torch.manual_seed(seed)
     torch.cuda.manual_seed_all(seed)
 
+
 def get_args():
-    parser=argparse.ArgumentParser()
-    parser.add_argument("--algo", type=str, default=DIFF_ALGOS + RL_ALGOS)
-    parser.add_argument("--env_name", type=str, default="Move-v1")
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--algo", type=str, default='sac')
+    parser.add_argument("--env_name", type=str, default="Doughstretch-v1")
     parser.add_argument("--path", type=str, default='./tmp')
     parser.add_argument("--seed", type=int, default=0)
     parser.add_argument("--sdf_loss", type=float, default=10)
@@ -39,25 +41,28 @@ def get_args():
     parser.add_argument("--softness", type=float, default=666.)
     parser.add_argument("--optim", type=str, default='Adam', choices=['Adam', 'Momentum'])
 
-    args=parser.parse_args()
+    args = parser.parse_args()
 
     return args
+
 
 def main():
     args = get_args()
     if args.num_steps is None:
         if args.algo in DIFF_ALGOS:
-            args.num_steps = 50 * 200
+            args.num_steps = 500 * 200
         else:
             args.num_steps = 500000
 
     logger = Logger(args.path)
     set_random_seed(args.seed)
 
-    env = make(args.env_name, nn=(args.algo=='nn'), sdf_loss=args.sdf_loss,
-                            density_loss=args.density_loss, contact_loss=args.contact_loss,
-                            soft_contact_loss=args.soft_contact_loss)
+    env = make(args.env_name, nn=(args.algo == 'nn'), sdf_loss=args.sdf_loss,
+               density_loss=args.density_loss, contact_loss=args.contact_loss,
+               soft_contact_loss=args.soft_contact_loss)
     env.seed(args.seed)
+
+    env.render()
 
     if args.algo == 'sac':
         train_sac(env, args.path, logger, args)
@@ -71,6 +76,7 @@ def main():
         solve_nn(env, args.path, logger, args)
     else:
         raise NotImplementedError
+
 
 if __name__ == '__main__':
     main()

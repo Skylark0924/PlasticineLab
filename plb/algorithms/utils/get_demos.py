@@ -30,8 +30,8 @@ def set_random_seed(seed):
 def get_args():
     parser = argparse.ArgumentParser()
     # parser.add_argument("--algo", type=str, default=DIFF_ALGOS + RL_ALGOS)
-    parser.add_argument("--algo", type=str, default='action')
-    parser.add_argument("--env_name", type=str, default="Move-v1")
+    parser.add_argument("--algo", type=str, default='ppo')
+    parser.add_argument("--env_name", type=str, default="Doughstretch-v1")
     parser.add_argument("--path", type=str, default='./tmp')
     parser.add_argument("--seed", type=int, default=0)
     parser.add_argument("--sdf_loss", type=float, default=10)
@@ -53,6 +53,7 @@ def get_args():
 
 def get_demo(env_name, path):
     args = get_args()
+    args.path = path
     if args.num_steps is None:
         if args.algo in DIFF_ALGOS:
             args.num_steps = 50 * 200
@@ -80,19 +81,19 @@ def get_demo(env_name, path):
     else:
         raise NotImplementedError
     env.close()
-    # ti.reset()
 
 
 def main():
     args = get_args()
-    envs = ['Move', 'Torus', 'Rope', 'Writer', 'Pinch', 'Rollingpin', 'Chopsticks', 'Table', 'TripleMove', 'Assembly']
+    # envs = ['Move', 'Torus', 'Rope', 'Writer', 'Pinch', 'Rollingpin', 'Chopsticks', 'Table', 'TripleMove', 'Assembly']
+    envs = ['Doughstretch']
     for env in envs:
-        for version in range(1, 6):
+        for version in range(1, 2):
             env_name = '{}-v{}'.format(env, version)
             path = 'log/{}_{}'.format(env_name, args.algo)
-            if not os.path.exists(path):
-                print('Here is {}'.format(env_name))
-                get_demo(env_name, path)
+            # if not os.path.exists(path):
+            print('Here is {}_{}'.format(env_name, args.algo))
+            get_demo(env_name, path)
 
 
 if __name__ == '__main__':

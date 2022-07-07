@@ -9,12 +9,13 @@ from .utils import merge_lists
 
 PATH = os.path.dirname(os.path.abspath(__file__))
 
+
 class PlasticineEnv(gym.Env):
     def __init__(self, cfg_path, version, nn=False):
         from ..engine.taichi_env import TaichiEnv
         self.cfg_path = cfg_path
         cfg = self.load_varaints(cfg_path, version)
-        self.taichi_env = TaichiEnv(cfg, nn) # build taichi environment
+        self.taichi_env = TaichiEnv(cfg, nn)  # build taichi environment
         self.taichi_env.initialize()
         self.cfg = cfg.ENV
         self.taichi_env.set_copy(True)

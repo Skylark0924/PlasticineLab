@@ -13,7 +13,7 @@ class SAC(Algorithm):
                  policy_lr=0.0003, q_lr=0.0003, entropy_lr=0.0003,
                  policy_hidden_units=[256, 256], q_hidden_units=[256, 256],
                  target_update_coef=0.005, log_interval=10,
-                 GaussianPolicy=None, TwinnedStateActionFunction=None):
+                 GaussianPolicy=None, TwinnedStateActionFunction=None, load_model_path=None):
         super().__init__(
             state_dim, action_dim, device, gamma, nstep, log_interval)
 
@@ -33,6 +33,12 @@ class SAC(Algorithm):
             action_dim=self._action_dim,
             hidden_units=q_hidden_units
             ).to(self._device).eval()
+
+        if load_model_path is not None:
+            self._policy_net.load(os.path.join(load_model_path, 'policy_net.pth'))
+            self._online_q_net.load(os.path.join(load_model_path, 'online_q_net.pth'))
+            self._target_q_net.load(os.path.join(load_model_path, 'target_q_net.pth'))
+            print('Model {} loaded.'.format(load_model_path))
 
         # Copy parameters of the learning network to the target network.
         self._target_q_net.load_state_dict(self._online_q_net.state_dict())
@@ -210,5 +216,5 @@ class SAC(Algorithm):
     def save_models(self, save_dir):
         super().save_models(save_dir)
         self._policy_net.save(os.path.join(save_dir, 'policy_net.pth'))
-        #self._online_q_net.save(os.path.join(save_dir, 'online_q_net.pth'))
-        #self._target_q_net.save(os.path.join(save_dir, 'target_q_net.pth'))
+        self._online_q_net.save(os.path.join(save_dir, 'online_q_net.pth'))
+        self._target_q_net.save(os.path.join(save_dir, 'target_q_net.pth'))

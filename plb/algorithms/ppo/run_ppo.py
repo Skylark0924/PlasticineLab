@@ -26,7 +26,7 @@ def train_ppo(env, path, logger, old_args):
     args = get_args()
     args.num_env_steps = num_steps
 
-    log_dir = args.log_dir = path
+    log_dir = path
     args.save_dir = path
 
     if args.cuda and torch.cuda.is_available() and args.cuda_deterministic:

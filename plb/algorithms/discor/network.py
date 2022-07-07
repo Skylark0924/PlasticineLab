@@ -115,9 +115,11 @@ class GaussianPolicy(BaseNetwork):
         log_stds = torch.clamp(
             log_stds, min=self.LOG_STD_MIN, max=self.LOG_STD_MAX)
         stds = log_stds.exp_()
-
-        # Gaussian distributions.
-        normals = Normal(means, stds)
+        try:
+            # Gaussian distributions.
+            normals = Normal(means, stds)
+        except:
+            pass
 
         # Sample actions.
         xs = normals.rsample()
